@@ -12,10 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,9 +33,16 @@ public class BlogController {
     private IImageService imageService;
 
     @GetMapping("/home")
-    public ModelAndView home(@PageableDefault(size = 2) Pageable pageable) {
+    public ModelAndView home(@PageableDefault(size = 2) Pageable pageable,
+                             @RequestParam(name = "q", required = false) String search) {
         ModelAndView modelAndView = new ModelAndView("index");
-        Page<Blog> blogs = blogService.findAll(pageable);
+        Page<Blog> blogs;
+        if (search == null || search.equals("")) {
+            blogs = blogService.findAll(pageable);
+        } else {
+            blogs = blogService.findAllByTitleContaining(search,pageable);
+            modelAndView.addObject("q", search);
+        }
         List<Image> images = (List<Image>) imageService.findAll();
         modelAndView.addObject("blogs", blogs);
         modelAndView.addObject("images", images);

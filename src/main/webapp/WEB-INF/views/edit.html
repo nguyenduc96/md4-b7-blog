@@ -18,7 +18,7 @@
 <div class="card-body">
     <div class="container">
         <form th:action="@{/status}" method="post" enctype="multipart/form-data" th:object="${blogForm}">
-            <input type="hidden" th:field="${id}">
+            <input type="hidden" th:field="*{id}">
             <div>
                 Name :
                 <input type="text" th:field="*{name}">

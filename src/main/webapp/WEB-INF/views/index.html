@@ -17,7 +17,10 @@
         <a class="nav-link active" aria-current="page" th:href="@{/status}">New status</a>
         <a class="nav-link active" th:href="@{/home}">Home</a>
         <a class="nav-link active" th:href="@{https://www.facebook.com/duc96}">FB-Nguyen-Huynh-Duc</a>
-        <a class="nav-link active" href="#">Link</a>
+        <form  class="nav-link active">
+            <input type="text" name="q" placeholder="Search....">
+            <button class="btn btn-warning">Search</button>
+        </form>
     </nav>
 </div>
 <div class="card-body">
@@ -42,20 +45,36 @@
         </div>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" th:href="@{'/home'(page=${blogs.number - 1})}" th:if="${blogs.hasPrevious()}">Previous</a>
-                        <a class="page-link disabled" disabled th:if="${!blogs.hasPrevious()}">Previous</a>
-                    </li>
-                    <th:block>
+
+                    <th:block th:if="${q == null || q == ''}">
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{'/home'(page=${blogs.number - 1})}" th:if="${blogs.hasPrevious()}">Previous</a>
+                            <a class="page-link disabled" disabled th:if="${!blogs.hasPrevious()}">Previous</a>
+                        </li>
                         <li  class="page-item"
-                            th:each="i : ${#numbers.sequence(0, ((blogs.totalPages/2) + 1))}">
+                            th:each="i : ${#numbers.sequence(0, (blogs.totalPages - 1))}">
                             <a class="page-link" th:href="@{'/home'(page=${i})}" th:text="${i+1}"></a>
                         </li>
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{'/home'(page=${blogs.number + 1})}" th:if="${blogs.hasNext()}">Next</a>
+                            <a class="page-link disabled" disabled th:if="${!blogs.hasNext()}">Next</a>
+                        </li>
                     </th:block>
-                    <li class="page-item">
-                        <a class="page-link" th:href="@{'/home'(page=${blogs.number + 1})}" th:if="${blogs.hasNext()}">Next</a>
-                        <a class="page-link disabled" disabled th:if="${!blogs.hasNext()}">Next</a>
-                    </li>
+                    <th:block th:if="${q != null}">
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{'/home'(q = ${q},page=${blogs.number - 1})}" th:if="${blogs.hasPrevious()}">Previous</a>
+                            <a class="page-link disabled" disabled th:if="${!blogs.hasPrevious()}">Previous</a>
+                        </li>
+                        <li  class="page-item"
+                            th:each="i : ${#numbers.sequence(0, (blogs.totalPages - 1))}">
+                            <a class="page-link" th:href="@{'/home'(q = ${q}, page=${i})}" th:text="${i+1}"></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" th:href="@{'/home'(q = ${q},page=${blogs.number + 1})}" th:if="${blogs.hasNext()}">Next</a>
+                            <a class="page-link disabled" disabled th:if="${!blogs.hasNext()}">Next</a>
+                        </li>
+                    </th:block>
+
                 </ul>
             </nav>
     </div>
