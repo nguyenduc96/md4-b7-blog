@@ -25,8 +25,8 @@ public class ImageService implements IImageService {
     }
 
     @Override
-    public Image findById(Long id) {
-        return imageRepository.findById(id).get();
+    public Optional<Image> findById(Long id) {
+        return imageRepository.findById(id);
     }
 
     @Override

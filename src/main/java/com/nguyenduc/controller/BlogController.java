@@ -59,7 +59,7 @@ public class BlogController {
     @GetMapping("/edit/{id}")
     public ModelAndView editForm(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("edit");
-        Blog blog = blogService.findById(id);
+        Blog blog = blogService.findById(id).get();
         BlogForm blogForm = new BlogForm();
         blogForm.setName(blog.getName());
         blogForm.setId(blog.getId());
